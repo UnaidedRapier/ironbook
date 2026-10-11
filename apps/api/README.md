@@ -5,7 +5,7 @@ Backend API for Project Iron Book, written in Rust with Axum.
 ## Layout
 
 - `src/` — application source (binary: `ironbook_api`)
-- `http/` — HTTP layer (routes/handlers)
+- `http/` — sample `.http` request files for manual API testing (the actual HTTP handlers live in `src/views/`)
 - `migrations/` — SQLx database migrations (PostgreSQL)
 - `tests/` — integration tests
 - `.sqlx/` — offline query metadata for SQLx
