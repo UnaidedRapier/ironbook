@@ -34,7 +34,7 @@ Please keep discussions, issue threads, and pull request reviews respectful, con
 * **Backend (`/apps/api` or root Rust crate):** Built with Rust and Axum.
 * **Web Frontend (`/apps/web`):** Built with Python and Django.
 * **Docs Site (`/apps/home`):** Next.js with TypeScript.
-* **Mobile (`/apps/mobile`):** Native Android application built with Kotlin.
+* **Android (`/apps/android`):** Native Android application built with Kotlin.
 * **Desktop (`/apps/desktop`):** Built with C# and Avalonia.
 * **Database:** PostgreSQL managed via SQLx migrations.
 
