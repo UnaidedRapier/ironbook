@@ -22,8 +22,8 @@ export default function PrivacyPolicy() {
               </div>
 
               <p className="max-w-3xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                <strong className="font-semibold">Project Iron Book</strong> —
-                A Digital Financial Ledger
+                <strong className="font-semibold">Project Iron Book</strong> — A
+                Digital Financial Ledger
               </p>
 
               <p className="max-w-3xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
@@ -32,13 +32,12 @@ export default function PrivacyPolicy() {
               </p>
 
               <p className="max-w-3xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
-                This Privacy Policy explains how Project Iron Book
-                (&quot;Iron Book&quot;, &quot;we&quot;, &quot;our&quot;) handles
+                This Privacy Policy explains how Project Iron Book (&quot;Iron
+                Book&quot;, &quot;we&quot;, &quot;our&quot;) handles
                 information. Iron Book is an open-source,{" "}
-                <strong className="font-semibold">self-hosted</strong>{" "}
-                financial ledger: you run every component (API, web app,
-                desktop app, mobile app, and database) on infrastructure you
-                control.
+                <strong className="font-semibold">self-hosted</strong> financial
+                ledger: you run every component (API, web app, desktop app,
+                mobile app, and database) on infrastructure you control.
               </p>
             </section>
 
@@ -52,8 +51,8 @@ export default function PrivacyPolicy() {
                     <strong className="font-semibold">
                       Your financial data never leaves your infrastructure.
                     </strong>{" "}
-                    Iron Book has no central servers, no accounts system, and
-                    no telemetry. We cannot see, access, or sell your data — we
+                    Iron Book has no central servers, no accounts system, and no
+                    telemetry. We cannot see, access, or sell your data — we
                     simply never receive it.
                   </li>
 
@@ -74,9 +73,9 @@ export default function PrivacyPolicy() {
 
               <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                 <p className="leading-8 text-zinc-700 dark:text-zinc-300">
-                  <strong className="font-semibold">None.</strong> The Iron
-                  Book applications (Rust API, Python web app, C# desktop app,
-                  Kotlin Android app, Next.js project website) do not collect,
+                  <strong className="font-semibold">None.</strong> The Iron Book
+                  applications (Rust API, Python web app, C# desktop app, Kotlin
+                  Android app, Next.js project website) do not collect,
                   transmit, or share analytics, telemetry, usage statistics,
                   crash reports, or personal data with the project maintainers
                   or any third party.
@@ -84,8 +83,8 @@ export default function PrivacyPolicy() {
 
                 <ul className="mt-4 list-disc space-y-4 pl-6 leading-7 text-zinc-700 dark:text-zinc-300">
                   <li>
-                    All ledger data (accounts, entries, transactions) is
-                    stored in{" "}
+                    All ledger data (accounts, entries, transactions) is stored
+                    in{" "}
                     <strong className="font-semibold">
                       your own PostgreSQL database
                     </strong>{" "}
@@ -117,9 +116,9 @@ export default function PrivacyPolicy() {
                 <blockquote className="mt-6 border-l-4 border-zinc-300 pl-4 leading-7 text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
                   <strong className="font-semibold">Note:</strong> Optional
                   telemetry is a <em>proposed</em> feature (see the project
-                  issue tracker). If telemetry is ever added, it will be
-                  opt-in, documented here, and disabled by default. This policy
-                  will be updated before any such release.
+                  issue tracker). If telemetry is ever added, it will be opt-in,
+                  documented here, and disabled by default. This policy will be
+                  updated before any such release.
                 </blockquote>
               </div>
             </section>
