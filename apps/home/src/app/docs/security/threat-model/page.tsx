@@ -16,7 +16,7 @@ export default function ThreatModel() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Threat model
                 </h1>
               </div>

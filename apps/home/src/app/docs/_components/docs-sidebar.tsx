@@ -51,40 +51,69 @@ const sections: {
 ];
 
 export default function DocsSidebar({ current }: { current: string }) {
+  const linkClass = (href: string) =>
+    href === current
+      ? "ml-3 block font-medium text-black dark:text-white"
+      : "ml-3 block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white";
+
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 overflow-y-auto border-r border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black lg:block">
-      <h2 className="mb-6 text-lg font-semibold">Contents</h2>
+    <>
+      {/* Desktop sidebar */}
+      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 overflow-y-auto border-r border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black lg:block">
+        <h2 className="mb-6 text-lg font-semibold">Contents</h2>
 
-      <nav className="space-y-3 text-sm">
-        <a
-          href="/docs"
-          className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
-        >
-          Documentation
-        </a>
+        <nav className="space-y-3 text-sm">
+          <a
+            href="/docs"
+            className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+          >
+            Documentation
+          </a>
 
-        {sections.map((section) => (
-          <div key={section.label} className="space-y-3">
-            <p className="pt-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              {section.label}
-            </p>
+          {sections.map((section) => (
+            <div key={section.label} className="space-y-3">
+              <p className="pt-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                {section.label}
+              </p>
 
-            {section.links.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={
-                  link.href === current
-                    ? "ml-3 block font-medium text-black dark:text-white"
-                    : "ml-3 block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
-                }
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        ))}
-      </nav>
-    </aside>
+              {section.links.map((link) => (
+                <a key={link.href} href={link.href} className={linkClass(link.href)}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Mobile navigation (collapsible; desktop uses the sidebar above) */}
+      <details className="sticky top-0 z-10 border-b border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-black lg:hidden">
+        <summary className="cursor-pointer text-sm font-semibold">
+          Contents
+        </summary>
+        <nav className="mt-4 space-y-3 text-sm">
+          <a
+            href="/docs"
+            className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+          >
+            Documentation
+          </a>
+
+          {sections.map((section) => (
+            <div key={section.label} className="space-y-3">
+              <p className="pt-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                {section.label}
+              </p>
+
+              {section.links.map((link) => (
+                <a key={link.href} href={link.href} className={linkClass(link.href)}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          ))}
+        </nav>
+      </details>
+    </>
   );
 }

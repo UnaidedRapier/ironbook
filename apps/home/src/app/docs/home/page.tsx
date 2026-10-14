@@ -12,7 +12,7 @@ export default function DocsHome() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Project Iron Book
                 </h1>
 

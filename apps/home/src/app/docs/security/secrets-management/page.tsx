@@ -16,7 +16,7 @@ export default function SecretsManagement() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Secret management
                 </h1>
               </div>

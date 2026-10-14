@@ -16,7 +16,7 @@ export default function ApiTokens() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   API tokens
                 </h1>
               </div>
