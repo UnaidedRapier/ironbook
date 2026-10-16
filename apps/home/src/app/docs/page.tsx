@@ -97,6 +97,13 @@ export default function Docs() {
             >
               Security docs
             </a>
+
+            <a
+              href="/docs/privacy"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              Privacy Policy
+            </a>
           </nav>
         </aside>
 
