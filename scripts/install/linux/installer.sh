@@ -167,10 +167,15 @@ EXTRACTED_CONTENT=$(ls -A "$TMP_DIR/extracted")
 if [ "$(echo "$EXTRACTED_CONTENT" | wc -l)" -eq 1 ] \
   && [ -d "$TMP_DIR/extracted/$EXTRACTED_CONTENT" ]; then
 
-  mv "$TMP_DIR/extracted/$EXTRACTED_CONTENT"/* "$TARGET_SHARE/"
+  SRC_DIR="$TMP_DIR/extracted/$EXTRACTED_CONTENT"
 else
-  mv "$TMP_DIR/extracted"/* "$TARGET_SHARE/"
+  SRC_DIR="$TMP_DIR/extracted"
 fi
+
+# Copy the flattened contents (trailing `/.` includes dotfiles, which a
+# `*` glob would silently skip) instead of glob-moving them.
+cp -a "${SRC_DIR}/." "$TARGET_SHARE/"
+rm -rf "$TMP_DIR/extracted"
 
 # Ensure main binary is executable.
 chmod +x "${TARGET_SHARE}/ironbook"
