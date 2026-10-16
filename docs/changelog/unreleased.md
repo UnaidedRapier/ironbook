@@ -38,3 +38,5 @@
 - [#135]: Fixed mise failing on systems which don't have symlinks. Now mise installs to default installation directory.
 - [#151]: Fixed `pre-commit install` failing.
 - [#134]: Fixed setup failing when already running as root or `sudo` wasn't available.
+- [#171]: Fixed uninstall script breaking if interrupted.
+- [#174]: Fixed linux installer not moving dotfiles while installing.
