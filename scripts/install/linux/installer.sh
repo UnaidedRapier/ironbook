@@ -191,24 +191,11 @@ DATA_DIR="${HOME}/.local/share/ironbook_data"
 
 echo "Uninstalling Iron Book..."
 
-if [ -f "$TARGET_BIN" ]; then
-  rm -f "$TARGET_BIN"
-  echo "Removed wrapper script: ${TARGET_BIN}"
-fi
-
-if [ -f "$TARGET_DESKTOP" ]; then
-  rm -f "$TARGET_DESKTOP"
-  echo "Removed desktop entry: ${TARGET_DESKTOP}"
-fi
-
-if command -v update-desktop-database >/dev/null 2>&1; then
-  update-desktop-database \
-    "${HOME}/.local/share/applications" \
-    2>/dev/null || true
-fi
-
 printf "\nDo you also want to remove persistent app configuration and user databases? [y/N]: "
-read -r REMOVE_DATA
+# With `set -eu`, `read` failing at EOF (non-interactive stdin, e.g.
+# `ironbook --uninstall < /dev/null` or CI) would abort mid-uninstall.
+# Default to keeping data in that case.
+read -r REMOVE_DATA || REMOVE_DATA=n
 
 case "$REMOVE_DATA" in
   [yY]*)
@@ -230,6 +217,24 @@ esac
 if [ -d "$TARGET_SHARE" ]; then
   rm -rf "$TARGET_SHARE"
   echo "Removed app binaries: ${TARGET_SHARE}"
+fi
+
+if [ -f "$TARGET_DESKTOP" ]; then
+  rm -f "$TARGET_DESKTOP"
+  echo "Removed desktop entry: ${TARGET_DESKTOP}"
+fi
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database \
+    "${HOME}/.local/share/applications" \
+    2>/dev/null || true
+fi
+
+# Remove the launcher wrapper LAST: if the script is interrupted before this
+# point, `ironbook --uninstall` still works to finish the job.
+if [ -f "$TARGET_BIN" ]; then
+  rm -f "$TARGET_BIN"
+  echo "Removed wrapper script: ${TARGET_BIN}"
 fi
 
 echo "Iron Book has been successfully uninstalled."
