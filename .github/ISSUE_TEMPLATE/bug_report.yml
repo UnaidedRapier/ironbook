@@ -39,6 +39,22 @@ body:
       required: true
 
   - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Proposed Fix
+      description: A thought out plan or changes to be done to solve this.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: List of things need to be done for this issue to be consider fixed.
+    validations:
+      required: true
+
+  - type: textarea
     id: environment
     attributes:
       label: Environment & Component Details
