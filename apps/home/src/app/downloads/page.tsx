@@ -66,7 +66,7 @@ export default function Downloads() {
     <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
       <div className="mx-auto flex max-w-7xl">
         {/* Main */}
-        <main className="flex-1 px-6 py-16 sm:px-12 lg:px-20">
+        <main className="min-w-0 flex-1 px-6 py-16 sm:px-12 lg:px-20">
           <div className="mx-auto max-w-5xl space-y-24">
             {/* Hero */}
             <section className="space-y-6">

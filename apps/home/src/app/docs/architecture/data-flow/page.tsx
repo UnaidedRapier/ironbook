@@ -7,7 +7,7 @@ export default function DataFlow() {
         <DocsSidebar current="/docs/architecture/data-flow" />
 
         {/* Main */}
-        <main className="flex-1 px-6 py-16 sm:px-12 lg:px-20">
+        <main className="min-w-0 flex-1 px-6 py-16 sm:px-12 lg:px-20">
           <div className="mx-auto max-w-5xl space-y-24">
             {/* Hero */}
             <section className="space-y-6">
