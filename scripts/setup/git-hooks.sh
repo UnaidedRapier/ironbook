@@ -5,7 +5,7 @@
 # ==============================================================================
 
 setup_git_hooks() {
-    if ! cmd_exists pre-commit; then
+    if ! cmd_exists mise exec -- pre-commit; then
         return 0
     fi
 
