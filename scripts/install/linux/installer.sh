@@ -29,6 +29,22 @@ for cmd in curl jq gpg unzip; do
   fi
 done
 
+# Platform check: only the Linux x64 build is currently released. Refuse
+# early on anything else, before prompting or touching ~/.local.
+if [ "$(uname -s)" != "Linux" ]; then
+  echo "Error: Unsupported operating system: $(uname -s). This installer supports Linux only." >&2
+  exit 1
+fi
+
+case "$(uname -m)" in
+  x86_64|amd64)
+    ;;
+  *)
+    echo "Error: Unsupported CPU architecture: $(uname -m). Only the x64 build is released." >&2
+    exit 1
+    ;;
+esac
+
 # 1. Prompt release channel
 if [ -t 0 ]; then
   # Standard interactive execution
