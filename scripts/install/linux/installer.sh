@@ -29,6 +29,22 @@ for cmd in curl jq gpg unzip; do
   fi
 done
 
+# Platform check: only the Linux x64 build is currently released. Refuse
+# early on anything else, before prompting or touching ~/.local.
+if [ "$(uname -s)" != "Linux" ]; then
+  echo "Error: Unsupported operating system: $(uname -s). This installer supports Linux only." >&2
+  exit 1
+fi
+
+case "$(uname -m)" in
+  x86_64|amd64)
+    ;;
+  *)
+    echo "Error: Unsupported CPU architecture: $(uname -m). Only the x64 build is released." >&2
+    exit 1
+    ;;
+esac
+
 # 1. Prompt release channel
 if [ -t 0 ]; then
   # Standard interactive execution
@@ -57,7 +73,10 @@ case "$RELEASE_CHOICE" in
 esac
 
 echo "Fetching release metadata..."
-API_RESPONSE=$(curl -sSL "$API_URL")
+API_RESPONSE=$(curl -fsSL "$API_URL") || {
+  echo "Error: Failed to download release metadata from ${API_URL}." >&2
+  exit 1
+}
 
 if [ "$IS_LIST" = true ]; then
   ASSETS_JSON=$(echo "$API_RESPONSE" | jq -r '.[0].assets // empty')
@@ -131,10 +150,16 @@ KEY_FILE="${TMP_DIR}/pubkey.asc"
 
 # 3. Download release files
 echo "Downloading archive..."
-curl -sSL -o "$ZIP_FILE" "$ZIP_URL"
+curl -fsSL -o "$ZIP_FILE" "$ZIP_URL" || {
+  echo "Error: Failed to download release archive from ${ZIP_URL}." >&2
+  exit 1
+}
 
 echo "Downloading signature..."
-curl -sSL -o "$ASC_FILE" "$ASC_URL"
+curl -fsSL -o "$ASC_FILE" "$ASC_URL" || {
+  echo "Error: Failed to download release signature from ${ASC_URL}." >&2
+  exit 1
+}
 
 # 4. GPG Verification
 echo "$PUBKEY" > "$KEY_FILE"
@@ -167,10 +192,15 @@ EXTRACTED_CONTENT=$(ls -A "$TMP_DIR/extracted")
 if [ "$(echo "$EXTRACTED_CONTENT" | wc -l)" -eq 1 ] \
   && [ -d "$TMP_DIR/extracted/$EXTRACTED_CONTENT" ]; then
 
-  mv "$TMP_DIR/extracted/$EXTRACTED_CONTENT"/* "$TARGET_SHARE/"
+  SRC_DIR="$TMP_DIR/extracted/$EXTRACTED_CONTENT"
 else
-  mv "$TMP_DIR/extracted"/* "$TARGET_SHARE/"
+  SRC_DIR="$TMP_DIR/extracted"
 fi
+
+# Copy the flattened contents (trailing `/.` includes dotfiles, which a
+# `*` glob would silently skip) instead of glob-moving them.
+cp -a "${SRC_DIR}/." "$TARGET_SHARE/"
+rm -rf "$TMP_DIR/extracted"
 
 # Ensure main binary is executable.
 chmod +x "${TARGET_SHARE}/ironbook"
@@ -191,24 +221,11 @@ DATA_DIR="${HOME}/.local/share/ironbook_data"
 
 echo "Uninstalling Iron Book..."
 
-if [ -f "$TARGET_BIN" ]; then
-  rm -f "$TARGET_BIN"
-  echo "Removed wrapper script: ${TARGET_BIN}"
-fi
-
-if [ -f "$TARGET_DESKTOP" ]; then
-  rm -f "$TARGET_DESKTOP"
-  echo "Removed desktop entry: ${TARGET_DESKTOP}"
-fi
-
-if command -v update-desktop-database >/dev/null 2>&1; then
-  update-desktop-database \
-    "${HOME}/.local/share/applications" \
-    2>/dev/null || true
-fi
-
 printf "\nDo you also want to remove persistent app configuration and user databases? [y/N]: "
-read -r REMOVE_DATA
+# With `set -eu`, `read` failing at EOF (non-interactive stdin, e.g.
+# `ironbook --uninstall < /dev/null` or CI) would abort mid-uninstall.
+# Default to keeping data in that case.
+read -r REMOVE_DATA || REMOVE_DATA=n
 
 case "$REMOVE_DATA" in
   [yY]*)
@@ -230,6 +247,24 @@ esac
 if [ -d "$TARGET_SHARE" ]; then
   rm -rf "$TARGET_SHARE"
   echo "Removed app binaries: ${TARGET_SHARE}"
+fi
+
+if [ -f "$TARGET_DESKTOP" ]; then
+  rm -f "$TARGET_DESKTOP"
+  echo "Removed desktop entry: ${TARGET_DESKTOP}"
+fi
+
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database \
+    "${HOME}/.local/share/applications" \
+    2>/dev/null || true
+fi
+
+# Remove the launcher wrapper LAST: if the script is interrupted before this
+# point, `ironbook --uninstall` still works to finish the job.
+if [ -f "$TARGET_BIN" ]; then
+  rm -f "$TARGET_BIN"
+  echo "Removed wrapper script: ${TARGET_BIN}"
 fi
 
 echo "Iron Book has been successfully uninstalled."

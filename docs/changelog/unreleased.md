@@ -3,6 +3,7 @@
 - [#77]: Added structured versioned files for changelog.
 - [#133]: Added `Windows` setup section in relative documentation.
 - [#104]: Added `README` files in all relative directores.
+- [#172]: Added CPU Architecture check.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
@@ -38,3 +39,6 @@
 - [#135]: Fixed mise failing on systems which don't have symlinks. Now mise installs to default installation directory.
 - [#151]: Fixed `pre-commit install` failing.
 - [#134]: Fixed setup failing when already running as root or `sudo` wasn't available.
+- [#171]: Fixed uninstall script breaking if interrupted.
+- [#174]: Fixed Linux installer not moving dotfiles while installing.
+- [#169]: Fixed Linux installer not failing if the download was interrupted.

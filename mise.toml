@@ -12,7 +12,7 @@ config_roots = [
 env_file = ".env"
 
 [hooks.enter]
-script = """
+run = """
     echo 'Project IronBook'
 """
 

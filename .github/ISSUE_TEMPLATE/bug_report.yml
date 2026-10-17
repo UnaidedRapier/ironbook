@@ -35,6 +35,26 @@ body:
     attributes:
       label: Expected Behavior
       description: A clear description of what you expected to happen.
+      placeholder: When doing what, what should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Proposed Fix
+      description: A thought out plan or changes to be done to solve this.
+      placeholder: How do you think we can solve this?
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: List of things need to be done for this issue to be consider fixed.
+      placeholder: |
+          - [ ] ...
     validations:
       required: true
 

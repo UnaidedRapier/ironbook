@@ -48,6 +48,10 @@ const sections: {
       },
     ],
   },
+  {
+    label: "Legal",
+    links: [{ href: "/docs/privacy", label: "Privacy Policy" }],
+  },
 ];
 
 export default function DocsSidebar({ current }: { current: string }) {
