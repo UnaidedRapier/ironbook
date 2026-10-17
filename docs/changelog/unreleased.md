@@ -42,3 +42,4 @@
 - [#171]: Fixed uninstall script breaking if interrupted.
 - [#174]: Fixed Linux installer not moving dotfiles while installing.
 - [#169]: Fixed Linux installer not failing if the download was interrupted.
+- [#105]: Fixed Docs site not being user friendly on mobiles.
