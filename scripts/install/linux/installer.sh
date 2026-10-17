@@ -73,7 +73,10 @@ case "$RELEASE_CHOICE" in
 esac
 
 echo "Fetching release metadata..."
-API_RESPONSE=$(curl -sSL "$API_URL")
+API_RESPONSE=$(curl -fsSL "$API_URL") || {
+  echo "Error: Failed to download release metadata from ${API_URL}." >&2
+  exit 1
+}
 
 if [ "$IS_LIST" = true ]; then
   ASSETS_JSON=$(echo "$API_RESPONSE" | jq -r '.[0].assets // empty')
@@ -147,10 +150,16 @@ KEY_FILE="${TMP_DIR}/pubkey.asc"
 
 # 3. Download release files
 echo "Downloading archive..."
-curl -sSL -o "$ZIP_FILE" "$ZIP_URL"
+curl -fsSL -o "$ZIP_FILE" "$ZIP_URL" || {
+  echo "Error: Failed to download release archive from ${ZIP_URL}." >&2
+  exit 1
+}
 
 echo "Downloading signature..."
-curl -sSL -o "$ASC_FILE" "$ASC_URL"
+curl -fsSL -o "$ASC_FILE" "$ASC_URL" || {
+  echo "Error: Failed to download release signature from ${ASC_URL}." >&2
+  exit 1
+}
 
 # 4. GPG Verification
 echo "$PUBKEY" > "$KEY_FILE"
