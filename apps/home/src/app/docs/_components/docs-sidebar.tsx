@@ -81,7 +81,11 @@ export default function DocsSidebar({ current }: { current: string }) {
               </p>
 
               {section.links.map((link) => (
-                <a key={link.href} href={link.href} className={linkClass(link.href)}>
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={linkClass(link.href)}
+                >
                   {link.label}
                 </a>
               ))}
@@ -110,7 +114,11 @@ export default function DocsSidebar({ current }: { current: string }) {
               </p>
 
               {section.links.map((link) => (
-                <a key={link.href} href={link.href} className={linkClass(link.href)}>
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={linkClass(link.href)}
+                >
                   {link.label}
                 </a>
               ))}
