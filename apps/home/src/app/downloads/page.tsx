@@ -93,7 +93,7 @@ export default function Downloads() {
                 <ul className="list-disc space-y-4 pl-6 leading-7 text-zinc-700 dark:text-zinc-300">
                   <li>Run this curl command.</li>
                   <p className="font-mono text-sm bg-zinc-100 dark:bg-zinc-800 p-2 rounded">
-                    curl -sSL
+                    curl -fsSL
                     https://raw.githubusercontent.com/ironbook-labs/ironbook/refs/heads/main/scripts/install/linux/installer.sh
                     | sh
                   </p>
