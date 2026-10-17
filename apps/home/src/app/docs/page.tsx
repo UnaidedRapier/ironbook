@@ -107,8 +107,95 @@ export default function Docs() {
           </nav>
         </aside>
 
+        {/* Mobile navigation (collapsible; desktop uses the sidebar above) */}
+        <details className="border-b border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-black lg:hidden">
+          <summary className="cursor-pointer text-sm font-semibold">
+            Contents
+          </summary>
+          <nav className="mt-4 space-y-3 text-sm">
+            <a
+              href="#about"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              About
+            </a>
+            <a
+              href="#development"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              Development
+            </a>
+            <a
+              href="#philosophy"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Philosophy
+            </a>
+            <a
+              href="#project-structure"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Project Structure
+            </a>
+            <a
+              href="#directory-structure"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Directory Structure
+            </a>
+            <a
+              href="#setup"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Setup
+            </a>
+            <a
+              href="#todo"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Todo
+            </a>
+            <a
+              href="#users"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              Users
+            </a>
+            <a
+              href="#features"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Features
+            </a>
+            <a
+              href="#complaints"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Complaints
+            </a>
+            <a
+              href="#self-deployment"
+              className="ml-3 block text-zinc-500 transition hover:text-black dark:text-zinc-500 dark:hover:text-white"
+            >
+              Self Deployment
+            </a>
+            <a
+              href="/docs/architecture"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              Architecture docs
+            </a>
+            <a
+              href="/docs/security"
+              className="block text-zinc-600 transition hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              Security docs
+            </a>
+          </nav>
+        </details>
+
         {/* Main */}
-        <main className="flex-1 px-6 py-16 sm:px-12 lg:px-20">
+        <main className="min-w-0 flex-1 px-6 py-16 sm:px-12 lg:px-20">
           <div className="mx-auto max-w-5xl space-y-24">
             {/* Hero */}
             <section className="space-y-6">
@@ -117,7 +204,7 @@ export default function Docs() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Project Iron Book
                 </h1>
 

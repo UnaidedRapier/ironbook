@@ -3,7 +3,7 @@ export default function DocsHome() {
     <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
       <div className="mx-auto flex max-w-7xl">
         {/* Main */}
-        <main className="flex-1 px-6 py-16 sm:px-12 lg:px-20">
+        <main className="min-w-0 flex-1 px-6 py-16 sm:px-12 lg:px-20">
           <div className="mx-auto max-w-5xl space-y-24">
             {/* Hero */}
             <section className="space-y-6">
@@ -12,7 +12,7 @@ export default function DocsHome() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Project Iron Book
                 </h1>
 
@@ -26,34 +26,34 @@ export default function DocsHome() {
             <section id="setup-instructions" className="space-y-6 scroll-mt-24">
               <h2 className="text-3xl font-bold">Setup Instructions</h2>
 
-              <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
                 <h3 className="text-2xl font-bold">
                   Docker Setup (Recommended)
                 </h3>
                 <ul className="list-disc space-y-4 pl-6 leading-7 text-zinc-700 dark:text-zinc-300">
                   <li>
                     File which can be used to deploy is
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `infra/docker/compose/prod.yaml`
                     </pre>
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `docker compose up -d ironbook_home`
                     </pre>
                   </li>
 
                   <li>
                     Required environment variables are
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `HOST_PORT`
                     </pre>
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `NEXT_PUBLIC_SITE_URL`
                     </pre>
                   </li>
                 </ul>
               </div>
 
-              <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm sm:p-8 dark:border-zinc-800 dark:bg-zinc-900">
                 <h3 className="text-2xl font-bold">Direct From Repo</h3>
                 <ul className="list-disc space-y-4 pl-6 leading-7 text-zinc-700 dark:text-zinc-300">
                   <li>
@@ -73,14 +73,14 @@ export default function DocsHome() {
 
                   <li>
                     To setup, run (in project directory)
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `scripts/ironbook.sh setup`
                     </pre>
                   </li>
 
                   <li>
                     To start the server, run (in project directory)
-                    <pre className="min-w-max text-sm leading-6 text-zinc-100 ">
+                    <pre className="max-w-full overflow-x-auto text-sm leading-6 text-zinc-100">
                       `mise run prod:home`
                     </pre>
                   </li>

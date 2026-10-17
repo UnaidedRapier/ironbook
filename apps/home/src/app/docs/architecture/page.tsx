@@ -7,7 +7,7 @@ export default function ArchitectureDocs() {
         <DocsSidebar current="/docs/architecture" />
 
         {/* Main */}
-        <main className="flex-1 px-6 py-16 sm:px-12 lg:px-20">
+        <main className="min-w-0 flex-1 px-6 py-16 sm:px-12 lg:px-20">
           <div className="mx-auto max-w-5xl space-y-24">
             {/* Hero */}
             <section className="space-y-6">
@@ -16,7 +16,7 @@ export default function ArchitectureDocs() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-5xl font-black tracking-tight">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
                   Architecture
                 </h1>
               </div>
