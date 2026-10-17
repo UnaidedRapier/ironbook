@@ -6,7 +6,9 @@ export default function Home() {
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-zinc-600 dark:text-zinc-600">
             Iron
           </h1>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Book</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+            Book
+          </h1>
         </div>
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
