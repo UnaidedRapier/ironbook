@@ -23,7 +23,7 @@ pub async fn register(
     );
 
     let api_token = headers
-        .get("Authorization")
+        .get("authorization")
         .and_then(|value| value.to_str().ok())
         .ok_or(AppError::InvalidApiToken)?;
 

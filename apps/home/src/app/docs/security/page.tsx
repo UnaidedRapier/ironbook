@@ -16,7 +16,9 @@ export default function SecurityDocs() {
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">Security</h1>
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
+                  Security
+                </h1>
               </div>
 
               <p className="max-w-3xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
