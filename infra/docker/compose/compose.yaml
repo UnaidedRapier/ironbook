@@ -1,0 +1,68 @@
+services:
+  ironbook_db:
+    image: postgres:17
+    container_name: ironbook_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ironbook
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ironbook
+    restart: unless-stopped
+
+  ironbook_api:
+    build:
+      context: ../../..
+      dockerfile: apps/api/Dockerfile
+    container_name: ironbook_api
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      POSTGRES_HOST: ironbook_db
+    volumes:
+      - ../../../contracts/:/contracts
+    depends_on:
+      ironbook_db:
+        condition: service_healthy
+    networks:
+      - ironbook
+    restart: unless-stopped
+
+  ironbook_home:
+    build:
+      context: ../../../apps/home/
+      dockerfile: ./Dockerfile
+    container_name: ironbook_home
+    ports:
+      - "3000:3000"
+    networks:
+      - ironbook
+    restart: unless-stopped
+
+  ironbook_web:
+    build:
+      context: ../../../apps/web/
+      dockerfile: ./Dockerfile
+    container_name: ironbook_web
+    ports:
+      - "8080:8080"
+    networks:
+      - ironbook
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+
+networks:
+  ironbook:
+    driver: bridge

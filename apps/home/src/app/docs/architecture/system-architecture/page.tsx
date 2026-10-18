@@ -448,7 +448,7 @@ export default function SystemArchitecture() {
                     </a>{" "}
                     (
                     <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-sm dark:bg-zinc-800">
-                      dev.yaml
+                      compose.yaml
                     </code>
                     ,{" "}
                     <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-sm dark:bg-zinc-800">
