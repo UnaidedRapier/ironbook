@@ -6,7 +6,8 @@
 - [#172]: Added CPU Architecture check.
 - [#186]: Added production docker deployment for `api`, `home`, and `web`.
 - [#53]: Added hashing to API Tokens.
-- [#181]: Revamped the entire `.http` files
+- [#181]: Revamped the entire `.http` files.
+- [#175]: Linux installer now gives clear error messages.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
