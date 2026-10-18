@@ -91,11 +91,6 @@ if [ -z "$ASSETS_JSON" ] || [ "$ASSETS_JSON" = "null" ]; then
 fi
 
 # Only install the Linux Desktop release.
-#
-# Example:
-#   ironbook-desktop-v0.1.0-alpha-linux-x64.zip
-#
-# Everything else in the GitHub release is ignored.
 ZIP_NAME=$(echo "$ASSETS_JSON" | jq -r '
   .[]
   | select(
@@ -174,7 +169,7 @@ else
   exit 1
 fi
 
-# 5. Extraction & Path Setup
+# 5. Extraction & Path Setup (with atomic backup rotation)
 TARGET_SHARE="${HOME}/.local/share/ironbook"
 TARGET_BIN="${HOME}/.local/bin"
 TARGET_APPS="${HOME}/.local/share/applications"
@@ -182,9 +177,7 @@ TARGET_APPS="${HOME}/.local/share/applications"
 mkdir -p "$TARGET_BIN" "$TARGET_APPS" "${HOME}/.local/share"
 
 echo "Extracting application..."
-rm -rf "$TARGET_SHARE"
-mkdir -p "$TARGET_SHARE"
-
+mkdir -p "$TMP_DIR/extracted"
 unzip -q "$ZIP_FILE" -d "$TMP_DIR/extracted"
 
 # Handle top-level directory flattening inside zip if necessary.
@@ -192,24 +185,21 @@ EXTRACTED_CONTENT=$(ls -A "$TMP_DIR/extracted")
 
 if [ "$(echo "$EXTRACTED_CONTENT" | wc -l)" -eq 1 ] \
   && [ -d "$TMP_DIR/extracted/$EXTRACTED_CONTENT" ]; then
-
   SRC_DIR="$TMP_DIR/extracted/$EXTRACTED_CONTENT"
 else
   SRC_DIR="$TMP_DIR/extracted"
 fi
 
-# Copy the flattened contents (trailing `/.` includes dotfiles, which a
-# `*` glob would silently skip) instead of glob-moving them.
-cp -a "${SRC_DIR}/." "$TARGET_SHARE/"
+NEW_SHARE="${TMP_DIR}/new_ironbook"
+mkdir -p "$NEW_SHARE"
+cp -a "${SRC_DIR}/." "$NEW_SHARE/"
 rm -rf "$TMP_DIR/extracted"
 
 # Ensure main binary is executable.
-chmod +x "${TARGET_SHARE}/ironbook"
+chmod +x "${NEW_SHARE}/ironbook"
 
-# 6. Generate embedded Uninstaller inside ~/.local/share/ironbook/
-echo "Embedding uninstaller..."
-
-cat << 'EOF' > "${TARGET_SHARE}/uninstall.sh"
+# 6. Generate embedded Uninstaller inside NEW_SHARE
+cat << 'EOF' > "${NEW_SHARE}/uninstall.sh"
 #!/usr/bin/env sh
 set -eu
 
@@ -223,9 +213,6 @@ DATA_DIR="${HOME}/.local/share/ironbook_data"
 echo "Uninstalling Iron Book..."
 
 printf "\nDo you also want to remove persistent app configuration and user databases? [y/N]: "
-# With `set -eu`, `read` failing at EOF (non-interactive stdin, e.g.
-# `ironbook --uninstall < /dev/null` or CI) would abort mid-uninstall.
-# Default to keeping data in that case.
 read -r REMOVE_DATA || REMOVE_DATA=n
 
 case "$REMOVE_DATA" in
@@ -261,8 +248,6 @@ if command -v update-desktop-database >/dev/null 2>&1; then
     2>/dev/null || true
 fi
 
-# Remove the launcher wrapper LAST: if the script is interrupted before this
-# point, `ironbook --uninstall` still works to finish the job.
 if [ -f "$TARGET_BIN" ]; then
   rm -f "$TARGET_BIN"
   echo "Removed wrapper script: ${TARGET_BIN}"
@@ -271,7 +256,18 @@ fi
 echo "Iron Book has been successfully uninstalled."
 EOF
 
-chmod +x "${TARGET_SHARE}/uninstall.sh"
+chmod +x "${NEW_SHARE}/uninstall.sh"
+
+# Perform atomic switch using backup rotation
+BACKUP_SHARE="${TARGET_SHARE}.bak"
+rm -rf "$BACKUP_SHARE"
+
+if [ -d "$TARGET_SHARE" ]; then
+  mv "$TARGET_SHARE" "$BACKUP_SHARE"
+fi
+
+mv "$NEW_SHARE" "$TARGET_SHARE"
+rm -rf "$BACKUP_SHARE"
 
 # 7. Wrapper script with --uninstall check
 echo "Creating launcher wrapper in ${TARGET_BIN}/ironbook..."
