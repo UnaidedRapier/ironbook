@@ -91,6 +91,23 @@ API_RESPONSE=$(curl -fsSL "$API_URL") || {
   exit 1
 }
 
+# Validate JSON response and handle API error conditions gracefully
+if ! echo "$API_RESPONSE" | jq -e . >/dev/null 2>&1; then
+  echo "Error: Received invalid JSON response from GitHub API (possible captive portal or network proxy)." >&2
+  exit 1
+fi
+
+API_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.message // empty')
+if [ -n "$API_MESSAGE" ] && [ "$API_MESSAGE" != "null" ]; then
+  echo "Error from GitHub API: ${API_MESSAGE}" >&2
+  if [ "$IS_LIST" = false ]; then
+    echo "Hint: If no stable release exists yet, try running the installer again and select the [p]re-release channel." >&2
+  else
+    echo "Hint: If you are hitting API rate limits, please try again later." >&2
+  fi
+  exit 1
+fi
+
 if [ "$IS_LIST" = true ]; then
   ASSETS_JSON=$(echo "$API_RESPONSE" | jq -r '.[0].assets // empty')
 else
@@ -99,6 +116,9 @@ fi
 
 if [ -z "$ASSETS_JSON" ] || [ "$ASSETS_JSON" = "null" ]; then
   echo "Error: Could not retrieve release assets from GitHub API." >&2
+  if [ "$IS_LIST" = false ]; then
+    echo "Hint: If no stable release exists yet, try selecting the [p]re-release channel." >&2
+  fi
   exit 1
 fi
 
