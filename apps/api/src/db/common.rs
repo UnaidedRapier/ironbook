@@ -1,4 +1,6 @@
 use crate::{errors::AppError, state::AppState};
+use argon2::{Argon2, PasswordHash, PasswordVerifier};
+use tracing::warn;
 
 pub async fn verify_api_token(state: &AppState, api_token: &str) -> Result<bool, AppError> {
     let api_vec: Vec<&str> = api_token.split('_').collect();
@@ -14,12 +16,26 @@ pub async fn verify_api_token(state: &AppState, api_token: &str) -> Result<bool,
     .fetch_optional(&state.db)
     .await?;
 
-    if let Some(client) = client_opt {
-        let secret = client.api_secret;
-        Ok(secret == api_vec[2])
-    } else {
-        Ok(false)
+    let client = match client_opt {
+        Some(c) => c,
+        None => return Err(AppError::InvalidApiToken),
+    };
+
+    let secret = client.api_secret;
+    let argon2 = Argon2::default();
+    let parsed_hash = PasswordHash::new(&secret)
+        .map_err(|e| anyhow::anyhow!("Invalid stored secret hash format: {}", e))?;
+
+    println!("{}", api_vec.get(2).unwrap_or(&""));
+    let secret_matched = argon2
+        .verify_password(api_vec.get(2).unwrap_or(&"").as_bytes(), &parsed_hash)
+        .is_ok();
+
+    if !secret_matched {
+        warn!("Failed API Token verification attempt (invalid key)");
+        return Err(AppError::InvalidApiToken);
     }
+    Ok(true)
 }
 
 pub async fn get_user_id_by_username(

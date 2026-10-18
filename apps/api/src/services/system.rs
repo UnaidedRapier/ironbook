@@ -78,7 +78,7 @@ pub async fn generate_api_token(
             .hash_password(secret.as_bytes(), &salt)
             .map_err(|e| anyhow::anyhow!("Token hashing failed: {}", e))?
             .to_string();
-        let token = format!("ibk_{}_{}", key, &hashed_secret);
+        let token = format!("ibk_{}_{}", key, &secret);
         system::store_api_token(state, data, &key, &hashed_secret).await?;
 
         info!("Successfully generated and stored new API token");
