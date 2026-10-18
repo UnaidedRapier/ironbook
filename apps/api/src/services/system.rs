@@ -1,6 +1,10 @@
 use crate::db::{common, system};
 use crate::errors::AppError;
 use crate::state::AppState;
+use argon2::{
+    Argon2,
+    password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
+};
 use rand::distr::{Alphanumeric, SampleString};
 use serde::{Deserialize, Serialize};
 use tracing::{info, warn};
@@ -66,8 +70,16 @@ pub async fn generate_api_token(
             return Err(AppError::InvalidOwnerEmail);
         }
 
-        let token = Alphanumeric.sample_string(&mut rand::rng(), 32);
-        system::store_api_token(state, data, &token).await?;
+        let argon2 = Argon2::default();
+        let salt = SaltString::generate(&mut OsRng);
+        let key = Alphanumeric.sample_string(&mut rand::rng(), 32);
+        let secret = Alphanumeric.sample_string(&mut rand::rng(), 32);
+        let hashed_secret = argon2
+            .hash_password(secret.as_bytes(), &salt)
+            .map_err(|e| anyhow::anyhow!("Token hashing failed: {}", e))?
+            .to_string();
+        let token = format!("ibk_{}_{}", key, &hashed_secret);
+        system::store_api_token(state, data, &key, &hashed_secret).await?;
 
         info!("Successfully generated and stored new API token");
         Ok(token)

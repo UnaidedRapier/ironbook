@@ -77,18 +77,24 @@ async fn api_token_verification_distinguishes_existing_and_missing_tokens(pool: 
     init_db(&pool).await;
     reset(&pool).await;
 
-    sqlx::query("INSERT INTO clients (name, owner_email, api_token) VALUES ($1, $2, $3)")
-        .bind("client")
-        .bind("owner@example.com")
-        .bind("abcdefghijklmnopqrstuvwx123456")
-        .execute(&pool)
-        .await
-        .unwrap();
+    sqlx::query(
+        "INSERT INTO clients (name, owner_email, api_key, api_secret) VALUES ($1, $2, $3, $4)",
+    )
+    .bind("client")
+    .bind("owner@example.com")
+    .bind("abcdefghijklmnopqrstuvwx123456")
+    .bind("abcdefghijklmnopqrstuvwx123456")
+    .execute(&pool)
+    .await
+    .unwrap();
 
     assert!(
-        db::common::verify_api_token(&state, "abcdefghijklmnopqrstuvwx123456")
-            .await
-            .unwrap()
+        db::common::verify_api_token(
+            &state,
+            "ibk_abcdefghijklmnopqrstuvwx123456_abcdefghijklmnopqrstuvwx123456"
+        )
+        .await
+        .unwrap()
     );
     assert!(
         !db::common::verify_api_token(&state, "missing-token")
@@ -184,6 +190,7 @@ async fn system_first_start_and_api_token_storage_work(pool: PgPool) {
         db::system::store_api_token(
             &state,
             data,
+            &"abcdefghijklmnopqrstuvwxyz123456".to_string(),
             &"abcdefghijklmnopqrstuvwxyz123456".to_string()
         )
         .await
@@ -287,21 +294,28 @@ async fn auth_service_rejects_invalid_token_and_duplicates(pool: PgPool) {
         .unwrap_err();
     assert!(matches!(invalid, AppError::InvalidApiToken));
 
-    sqlx::query("INSERT INTO clients (name, owner_email, api_token) VALUES ($1, $2, $3)")
-        .bind("client")
-        .bind("owner@example.com")
-        .bind("abcdefghijklmnopqrstuvwxyz123456")
-        .execute(&pool)
-        .await
-        .unwrap();
+    sqlx::query(
+        "INSERT INTO clients (name, owner_email, api_key, api_secret) VALUES ($1, $2, $3, $4)",
+    )
+    .bind("client")
+    .bind("owner@example.com")
+    .bind("abcdefghijklmnopqrstuvwxyz123456")
+    .bind("abcdefghijklmnopqrstuvwxyz123456")
+    .execute(&pool)
+    .await
+    .unwrap();
 
-    services::auth::register(&state, "abcdefghijklmnopqrstuvwxyz123456", request())
-        .await
-        .unwrap();
+    services::auth::register(
+        &state,
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
+        request(),
+    )
+    .await
+    .unwrap();
 
     let duplicate_username = services::auth::register(
         &state,
-        "abcdefghijklmnopqrstuvwxyz123456",
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
         services::auth::RegisterRequest {
             email: "other@example.com".into(),
             username: "new-user".into(),
@@ -317,7 +331,7 @@ async fn auth_service_rejects_invalid_token_and_duplicates(pool: PgPool) {
 
     let duplicate_email = services::auth::register(
         &state,
-        "abcdefghijklmnopqrstuvwxyz123456",
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
         services::auth::RegisterRequest {
             email: "new@example.com".into(),
             username: "other-user".into(),
@@ -336,13 +350,16 @@ async fn login_service_covers_authentication_failures_and_success(pool: PgPool) 
     init_db(&pool).await;
     reset(&pool).await;
 
-    sqlx::query("INSERT INTO clients (name, owner_email, api_token) VALUES ($1, $2, $3)")
-        .bind("client")
-        .bind("owner@example.com")
-        .bind("abcdefghijklmnopqrstuvwxyz123456")
-        .execute(&pool)
-        .await
-        .unwrap();
+    sqlx::query(
+        "INSERT INTO clients (name, owner_email, api_key, api_secret) VALUES ($1, $2, $3, $4)",
+    )
+    .bind("client")
+    .bind("owner@example.com")
+    .bind("abcdefghijklmnopqrstuvwxyz123456")
+    .bind("abcdefghijklmnopqrstuvwxyz123456")
+    .execute(&pool)
+    .await
+    .unwrap();
 
     let bad_api_token = services::auth::login(
         &state,
@@ -358,7 +375,7 @@ async fn login_service_covers_authentication_failures_and_success(pool: PgPool) 
 
     let missing_user = services::auth::login(
         &state,
-        "abcdefghijklmnopqrstuvwxyz123456",
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
         services::auth::LoginRequest {
             email: "missing@example.com".into(),
             password: "hash".into(),
@@ -382,7 +399,7 @@ async fn login_service_covers_authentication_failures_and_success(pool: PgPool) 
 
     let bad_password = services::auth::login(
         &state,
-        "abcdefghijklmnopqrstuvwxyz123456",
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
         services::auth::LoginRequest {
             email: "alice@example.com".into(),
             password: "wrong".into(),
@@ -394,7 +411,7 @@ async fn login_service_covers_authentication_failures_and_success(pool: PgPool) 
 
     let success = services::auth::login(
         &state,
-        "abcdefghijklmnopqrstuvwxyz123456",
+        "ibk_abcdefghijklmnopqrstuvwxyz123456_abcdefghijklmnopqrstuvwxyz123456",
         services::auth::LoginRequest {
             email: "alice@example.com".into(),
             password: "hash".into(),
@@ -425,8 +442,6 @@ async fn generate_api_token_allows_bootstrap_without_auth(pool: PgPool) {
     .await
     .unwrap();
 
-    assert_eq!(response.token.len(), 32);
-    assert!(response.token.chars().all(|c| c.is_ascii_alphanumeric()));
     assert!(!db::system::is_first_start(&state).await.unwrap());
 }
 
