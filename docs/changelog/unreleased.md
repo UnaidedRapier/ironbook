@@ -7,7 +7,8 @@
 - [#186]: Added production docker deployment for `api`, `home`, and `web`.
 - [#53]: Added hashing to API Tokens.
 - [#181]: Revamped the entire `.http` files.
-- [#175]: Linux installer now gives clear error messages.
+- [#175]: Linux installer now gives clear error messages about required dependencies missing.
+- [#173]: Linux installe rnow gives clear error messages about GitHub API errors.
 
 ### Removed
 - [#76]: Removed `/assets` directory.
