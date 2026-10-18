@@ -20,19 +20,21 @@ pub async fn is_first_start(state: &AppState) -> Result<bool, AppError> {
 pub async fn store_api_token(
     state: &AppState,
     data: system::ApiTokenRequest,
-    api_token: &String,
+    api_key: &String,
+    api_secret: &String,
 ) -> Result<bool, AppError> {
     let mut tx: Transaction<'_, Postgres> = state.db.begin().await?;
 
     // Insert the client into the database
     sqlx::query!(
         r#"
-        INSERT INTO clients (name, owner_email, api_token)
-        VALUES ($1, $2, $3)
+        INSERT INTO clients (name, owner_email, api_key, api_secret)
+        VALUES ($1, $2, $3, $4)
         "#,
         data.name,
         data.owner_email,
-        api_token,
+        api_key,
+        api_secret,
     )
     .execute(&mut *tx)
     .await?;
