@@ -2,7 +2,8 @@ CREATE TABLE clients (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     owner_email VARCHAR(255) NOT NULL,
-    api_token VARCHAR(32) NOT NULL UNIQUE,
+    api_key VARCHAR(32) NOT NULL UNIQUE,
+    api_secret TEXT NOT NULL UNIQUE,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

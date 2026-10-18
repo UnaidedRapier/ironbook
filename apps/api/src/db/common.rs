@@ -1,18 +1,25 @@
 use crate::{errors::AppError, state::AppState};
 
 pub async fn verify_api_token(state: &AppState, api_token: &str) -> Result<bool, AppError> {
-    let api_token_opt = sqlx::query_scalar!(
+    let api_vec: Vec<&str> = api_token.split('_').collect();
+    let api_key = api_vec.get(1).unwrap_or(&"");
+    let client_opt = sqlx::query!(
         r#"
-        SELECT api_token
+        SELECT api_key, api_secret
         FROM clients
-        WHERE api_token = $1
+        WHERE api_key = $1
         "#,
-        api_token
+        api_key
     )
     .fetch_optional(&state.db)
     .await?;
 
-    Ok(api_token_opt.is_some())
+    if let Some(client) = client_opt {
+        let secret = client.api_secret;
+        Ok(secret == api_vec[2])
+    } else {
+        Ok(false)
+    }
 }
 
 pub async fn get_user_id_by_username(
