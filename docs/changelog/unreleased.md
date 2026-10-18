@@ -48,3 +48,4 @@
 - [#105]: Fixed Docs site not being user friendly on mobiles.
 - [#80]: Now organization GPG key is used to sign releases.
 - [#180]: A single owner can now have multiple clients.
+- [#170]: Linux installer no longer fails and leaves installation broken.
