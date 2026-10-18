@@ -1,0 +1,16 @@
+# Exclude everything by default
+*
+
+!.env
+!ironbook/**
+!static/**
+!templates/**
+!theme/**
+!web/**
+!manage.py
+!mise.toml
+!Procfile.tailwind
+!pyproject.toml
+!tests.py
+!uv.lock
+!launcher.py

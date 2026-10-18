@@ -1,0 +1,15 @@
+# Exclude everything by default
+*
+
+!contracts/**
+
+!apps/api/.env
+!apps/api/.cargo/**
+!apps/api/.sqlx/**
+!apps/api/migrations/**
+!apps/api/src/**
+!apps/api/tests/**
+!apps/api/build.rs
+!apps/api/Cargo.lock
+!apps/api/Cargo.toml
+!apps/api/mise.toml

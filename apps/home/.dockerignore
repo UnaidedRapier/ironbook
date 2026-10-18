@@ -1,0 +1,16 @@
+# Exclude everything by default
+*
+
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!public/**
+!src/app/**
+!.npmrc
+!eslint.config.mjs
+!mise.toml
+!next-sitemap.config.js
+!next.config.ts
+!postcss.config.mjs
+!tsconfig.json
+!.env
