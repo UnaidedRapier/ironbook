@@ -4,6 +4,7 @@
 - [#133]: Added `Windows` setup section in relative documentation.
 - [#104]: Added `README` files in all relative directores.
 - [#172]: Added CPU Architecture check.
+- [#181]: Revamped the entire `.http` files
 
 ### Removed
 - [#76]: Removed `/assets` directory.
@@ -44,4 +45,4 @@
 - [#169]: Fixed Linux installer not failing if the download was interrupted.
 - [#105]: Fixed Docs site not being user friendly on mobiles.
 - [#80]: Now organization GPG key is used to sign releases.
-- [#181]: Revamped the entire `.http` files
+- [#180]: A single owner can now have multiple clients.
