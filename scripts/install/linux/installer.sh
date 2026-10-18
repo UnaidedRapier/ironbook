@@ -22,13 +22,25 @@ FIY8CL+cHJJ021pIKah5awEA/g1b7J7VVOaX59AElX75Dx2VEyKbeoigtGURUn7+
 EOF
 )
 
-# Prerequisites check
+# Prerequisites check with user-friendly installation advice
+MISSING_CMDS=""
 for cmd in curl jq gpg unzip; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "Error: Required command '$cmd' is not installed." >&2
-    exit 1
+    MISSING_CMDS="${MISSING_CMDS} $cmd"
   fi
 done
+
+if [ -n "$MISSING_CMDS" ]; then
+  echo "Error: The following required command(s) are missing:$MISSING_CMDS" >&2
+  echo "" >&2
+  echo "Iron Book requires these tools to download, verify, and install the application." >&2
+  echo "Please install them using your system's package manager and re-run the installer:" >&2
+  echo "  - Debian / Ubuntu: sudo apt update && sudo apt install curl jq gnupg unzip" >&2
+  echo "  - Fedora / RHEL:   sudo dnf install curl jq gnupg unzip" >&2
+  echo "  - Arch Linux:    sudo pacman -S curl jq gnupg unzip" >&2
+  echo "  - Alpine Linux:  sudo apk add curl jq gnupg unzip" >&2
+  exit 1
+fi
 
 # Platform check: only the Linux x64 build is currently released. Refuse
 # early on anything else, before prompting or touching ~/.local.
