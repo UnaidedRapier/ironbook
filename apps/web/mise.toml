@@ -6,7 +6,7 @@ _.python.venv = "{{config_root}}/.venv"
 
 [tasks."setup"]
 description = "Setup Django Web Client"
-run = "uv sync && uv run python manage.py tailwind build && uv run python manage.py collectstatic --no-input"
+run = "uv sync && uv run python manage.py collectstatic --no-input && uv run python manage.py tailwind build"
 
 [tasks."dev"]
 description = "Run Django Dev Server"
